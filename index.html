@@ -13,6 +13,13 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+
+        /* --- THIS NEW RULE FIXES THE LINE BREAKS --- */
+        #successText {
+            white-space: pre-wrap;
+        }
+        /* --- END OF NEW RULE --- */
+
         /* Simple spinner for loading state */
         .spinner {
             border: 2px solid rgba(255, 255, 255, 0.3);
@@ -50,21 +57,9 @@
                 <img src="https://lh3.googleusercontent.com/d/1IUqbqFGzjB5zC9O8ZlVZczNBCLKyJ0u6" alt="Form Header" class="mx-auto w-full max-w-lg rounded-md shadow-md">
                 
                 <p class="mt-4 text-2xl font-semibold text-gray-800">
-                    Winter 2025 Backlog Exam Form
+                    Winter 2025-Backlog Exam Form
                 </p>
             </header>
-
-            <div id="successMessage" class="hidden p-4 mb-6 rounded-md bg-green-100 border border-green-300">
-                <p class="text-sm font-medium text-green-800" id="successText">
-                    Form submitted successfully! Your response has been recorded.
-                </p>
-            </div>
-
-            <div id="errorMessage" class="hidden p-4 mb-6 rounded-md bg-red-100 border border-red-300">
-                <p class="text-sm font-medium text-red-800" id="errorText">
-                    An error occurred. Please try submitting the form again.
-                </p>
-            </div>
 
             <form id="examForm">
                 <div class="space-y-6">
@@ -163,11 +158,23 @@
 
                     <div>
                         <button type="submit" id="submitButton" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>
-                            <span id="buttonText">Submit Application</span>
+                            <span id="buttonText">Submit and Await Confirmation</span>
                             <div id="buttonSpinner" class="hidden spinner"></div>
                         </button>
                     </div>
-                </div>
+
+                    <div id="successMessage" class="hidden p-4 rounded-md bg-green-100 border border-green-300">
+                        <p class="text-sm font-medium text-green-800" id="successText">
+                            Form submitted successfully! Your response has been recorded.
+                        </p>
+                    </div>
+        
+                    <div id="errorMessage" class="hidden p-4 rounded-md bg-red-100 border border-red-300">
+                        <p class="text-sm font-medium text-red-800" id="errorText">
+                            An error occurred. Please try submitting the form again.
+                        </p>
+                    </div>
+                    </div>
             </form>
         </div>
 
@@ -208,7 +215,7 @@
         //  FIX 3: This URL is a placeholder. You MUST replace it
         //  with your own new deployment URL.
         //
-        const formScriptURL = 'https://script.google.com/macros/s/AKfycbzGNurJ5Wjmdxqt9UbXMaFyV__q1tOR_nNXmTwIaQzFpuurbvs55agLrqU72rIHqRTx8Q/exec';
+        const formScriptURL = 'https://script.google.com/macros/s/AKfycbwmbhHzOCsU-xumQeqlpwI3wl1eBBlB9Mwue3wwTqSs3n5qimvdI3L5fGIP6ZDy_sbM1w/exec';
 
         // --- COURSE DATA ---
         let coursesByBranchAndSem = {};
@@ -361,6 +368,8 @@
                 summaryContainer.appendChild(list);
             }
         }
+
+
 
         async function handleFormSubmit(e) {
             e.preventDefault(); 
@@ -517,15 +526,17 @@
         function showSuccess(message) {
             successText.textContent = message;
             successMessage.classList.remove('hidden');
-errorMessage.classList.add('hidden');
-            window.scrollTo(0, 0); 
+            errorMessage.classList.add('hidden');
+            // --- THIS LINE IS CHANGED ---
+            successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
         }
 
         function showError(message) {
             errorText.textContent = message;
             errorMessage.classList.remove('hidden');
             successMessage.classList.add('hidden');
-            window.scrollTo(0, 0);
+            // --- THIS LINE IS CHANGED ---
+            errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         async function loadCoursesAndInitialize() {
